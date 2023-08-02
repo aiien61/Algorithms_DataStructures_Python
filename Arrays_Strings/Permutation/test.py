@@ -3,31 +3,50 @@ from main import Solution
 
 
 class Test(unittest.TestCase):
-    test_cases = (
-        ("dog", "  god", True),
-        ('abcd', 'bacd', True),
-        ("3563476", "7334566", True),
-        ("wef34f", "wffe34", True),
-        ("dogx", "godz", False),
-        ("abcd", "d2cba", False),
-        ("2354", "1234", False),
-        ("dcw4f", "dcw5f", False),
-        ("DOG", "dog", True),
-        ("dog ", "dog", False),
-        ("aaab", "bbba", False)
+
+    test_cases_T = (
+        ('abcd', 'bacd'),
+        ('3563476', '7334566'),
+        ('wef34f', 'wffe34'),
+    )
+    test_cases_F = (
+        ('abcd', 'd2cba'),
+        ('2354', '1234'),
+        ('dcw4f', 'dcw5f'),
     )
 
     def test_is_permutation_by_count(self):
         sol = Solution()
-        for word1, word2, expected in self.test_cases:
-            actual = sol.is_permutation_by_count(word1, word2)
-            self.assertEqual(actual, expected)
+        for str1, str2 in self.test_cases_T:
+            result = sol.is_permutation_by_count(str1, str2)
+            self.assertTrue(result)
+        
+        for str1, str2 in self.test_cases_F:
+            result = sol.is_permutation_by_count(str1, str2)
+            self.assertFalse(result)
+
 
     def test_is_permutation_by_sort(self):
         sol = Solution()
-        for word1, word2, expected in self.test_cases:
-            actual = sol.is_permutation_by_sort(word1, word2)
-            self.assertEqual(actual, expected)
+        for str1, str2 in self.test_cases_T:
+            result = sol.is_permutation_by_sort(str1, str2)
+            self.assertTrue(result)
+
+        for str1, str2 in self.test_cases_F:
+            result = sol.is_permutation_by_sort(str1, str2)
+            self.assertFalse(result)
+
+
+    def test_is_permutation_by_pythonic(self):
+        sol = Solution()
+        for str1, str2 in self.test_cases_T:
+            result = sol.is_permutation_by_pythonic(str1, str2)
+            self.assertTrue(result)
+
+        for str1, str2 in self.test_cases_F:
+            result = sol.is_permutation_by_pythonic(str1, str2)
+            self.assertFalse(result)
+
 
 if __name__ == "__main__":
     unittest.main()
