@@ -65,20 +65,15 @@ class Solution:
             return self.return_kth_to_last_by_recursion(singlylinkedlist, k)
         else:
             return singlylinkedlist.head.data
-
-
-if __name__ == "__main__":
-    sol = Solution()
-    test_cases = (
-        # list, k, expected
-        ((10, 20, 30, 40, 50), 1, 50),
-        ((10, 20, 30, 40, 50), 5, 10),
-    )
-    for data, k, expected in test_cases:
-        print(data)
-        mylist = SinglyLinkedList(data)
-        assert sol.is_valid_search(mylist, k), f"illegal k={k} to search of length {len(mylist)}"
-        actual = sol.return_kth_to_last_by_recursion(mylist, k)
-        if actual == expected:
-            print(f"actual: {actual} == expected: {expected}")
-            print("OK!")
+        
+    # Time: O(n), Space: O(1)
+    def return_kth_to_last_by_runners(self, singlylinkedlist, k) -> int:
+        p1 = singlylinkedlist.head
+        p2 = singlylinkedlist.head
+        for _ in range(k):
+            p1 = p1.next
+        
+        while p1:
+            p1 = p1.next
+            p2 = p2.next
+        return p2.data
