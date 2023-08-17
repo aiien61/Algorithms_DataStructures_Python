@@ -19,32 +19,49 @@ class Test(unittest.TestCase):
         [[2, 2, 2], [7, 7, 8], [1, 0, 0, 0]]
     ]
 
+
     def test_backward_data_lists(self):
-        for data_list_1, data_list_2, expected in self.backward_data_lists:
-            list_1 = Singly_Linked_List(data_list_1)
-            list_2 = Singly_Linked_List(data_list_2)
-            result = self.sol.backward_sum_lists(list_1, list_2)
+        for data_a, data_b, expected in self.backward_data_lists:
+            a = Singly_Linked_List(data_a)
+            b = Singly_Linked_List(data_b)
+            result = self.sol.backward_sum_lists(a, b)
             self.assertEqual(result.data, expected)
-    
+
+
     def test_backward_sum_lists_by_int(self):
-        for data_list_1, data_list_2, expected in self.backward_data_lists:
-            list_1 = Singly_Linked_List(data_list_1)
-            list_2 = Singly_Linked_List(data_list_2)
-            result = self.sol.backward_sum_lists_by_int(list_1, list_2)
+        for data_a, data_b, expected in self.backward_data_lists:
+            a = Singly_Linked_List(data_a)
+            b = Singly_Linked_List(data_b)
+            result = self.sol.backward_sum_lists_by_int(a, b)
+            self.assertEqual(result.data, expected)
+
+    
+    def test_backward_sum_lists_by_pythonic(self):
+        for data_a, data_b, expected in self.backward_data_lists:
+            a = Singly_Linked_List(data_a)
+            b = Singly_Linked_List(data_b)
+            result = self.sol.backward_sum_lists_by_pythonic(a, b)
             self.assertEqual(result.data, expected)
     
     def test_forward_sum_lists(self):
-        for data_list_1, data_list_2, expected in self.forward_data_lists:
-            list_1 = Singly_Linked_List(data_list_1)
-            list_2 = Singly_Linked_List(data_list_2)
-            result = self.sol.forward_sum_lists(list_1, list_2)
+        for data_a, data_b, expected in self.forward_data_lists:
+            a = Singly_Linked_List(data_a)
+            b = Singly_Linked_List(data_b)
+            result = self.sol.forward_sum_lists(a, b)
             self.assertEqual(result.data, expected)
     
     def test_forward_sum_lists_by_int(self):
-        for data_list_1, data_list_2, expected in self.forward_data_lists:
-            list_1 = Singly_Linked_List(data_list_1)
-            list_2 = Singly_Linked_List(data_list_2)
-            result = self.sol.forward_sum_lists_by_int(list_1, list_2)
+        for data_a, data_b, expected in self.forward_data_lists:
+            a = Singly_Linked_List(data_a)
+            b = Singly_Linked_List(data_b)
+            result = self.sol.forward_sum_lists_by_int(a, b)
+            self.assertEqual(result.data, expected)
+
+    def test_forward_sum_lists_by_pythonic(self):
+        for data_a, data_b, expected in self.forward_data_lists:
+            a = Singly_Linked_List(data_a)
+            b = Singly_Linked_List(data_b)
+            result = self.sol.forward_sum_lists_by_pythonic(a, b)
             self.assertEqual(result.data, expected)
 
 

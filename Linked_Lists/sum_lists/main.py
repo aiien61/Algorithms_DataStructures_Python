@@ -71,35 +71,77 @@ class Singly_Linked_List:
 
 class Solution:
 
-    def backward_sum_lists_by_int(self, list_1, list_2) -> Singly_Linked_List:
+    def backward_sum_lists_by_pythonic(self, a, b) -> Singly_Linked_List:
+        num_a = "" if a else "0"
+        num_b = "" if b else "0"
+        
+        if node:= a.head:
+            while node:
+                num_a = str(node.data) + num_a
+                node = node.next
+        if node:= b.head:
+            while node:
+                num_b = str(node.data) + num_b
+                node = node.next
+        
+        num_ab = int(num_a) + int(num_b)
+        new_list = Singly_Linked_List()
+        
+        for digit in str(num_ab)[::-1]:
+            new_list.append(int(digit))
+        return new_list
+
+
+    def forward_sum_lists_by_pythonic(self, a, b) -> Singly_Linked_List:
+        num_a = "" if a else "0"
+        num_b = "" if b else "0"
+        
+        if node := a.head:
+            while node:
+                num_a = num_a + str(node.data)
+                node = node.next
+        if node := b.head:
+            while node:
+                num_b = num_b + str(node.data)
+                node = node.next
+        
+        num_ab = int(num_a) + int(num_b)
+        new_list = Singly_Linked_List()
+        
+        for digit in str(num_ab):
+            new_list.append(int(digit))
+        return new_list
+
+
+    def backward_sum_lists_by_int(self, a, b) -> Singly_Linked_List:
         num_1 = 0
-        for i, num in enumerate(list_1.data):
+        for i, num in enumerate(a.data):
             num_1 += num * pow(10, i)
         
         num_2 = 0
-        for i, num in enumerate(list_2.data):
+        for i, num in enumerate(b.data):
             num_2 += num * pow(10, i)
 
         data_list = list(map(int, str(int(num_1 + num_2))[::-1]))
         return Singly_Linked_List(data_list)
 
 
-    def forward_sum_lists_by_int(self, list_1, list_2) -> Singly_Linked_List:
+    def forward_sum_lists_by_int(self, a, b) -> Singly_Linked_List:
         num_1 = 0
-        for i, num in enumerate(list_1.data[::-1]):
+        for i, num in enumerate(a.data[::-1]):
             num_1 += num * pow(10, i)
 
         num_2 = 0
-        for i, num in enumerate(list_2.data[::-1]):
+        for i, num in enumerate(b.data[::-1]):
             num_2 += num * pow(10, i)
 
         data_list = list(map(int, str(int(num_1 + num_2))))
         return Singly_Linked_List(data_list)
 
 
-    def backward_sum_lists(self, list_1, list_2) -> Singly_Linked_List:
-        p1 = list_1.head
-        p2 = list_2.head
+    def backward_sum_lists(self, a, b) -> Singly_Linked_List:
+        p1 = a.head
+        p2 = b.head
         sum_list = Singly_Linked_List()
         next_digit = 0
         while p1 or p2:
@@ -120,20 +162,20 @@ class Solution:
         return sum_list
 
 
-    def forward_sum_lists(self, list_1, list_2) -> Singly_Linked_List:
-        list_1.rev()
-        list_2.rev()
+    def forward_sum_lists(self, a, b) -> Singly_Linked_List:
+        a.rev()
+        b.rev()
 
-        n1, n2 = len(list_1), len(list_2)
+        n1, n2 = len(a), len(b)
         d = abs(n1 - n2)
         if n1 < n2:
-            list_1.append_multiple([0] * d)
+            a.append_multiple([0] * d)
         elif n2 < n1:
-            list_2.append_multiple([0] * d)
+            b.append_multiple([0] * d)
 
 
-        p1 = list_1.head
-        p2 = list_2.head
+        p1 = a.head
+        p2 = b.head
         sum_list = Singly_Linked_List()
         next_digit = 0
         while p1 or p2:
