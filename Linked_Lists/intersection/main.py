@@ -26,18 +26,6 @@ class Singly_Linked_List:
             result.append(node.data)
             node = node.next
         return result
-    
-    def append(self, node: Node) -> None:
-        if not self.head:
-            self.head = node
-            return None
-        
-        last_node = self.head
-        while last_node.next:
-            last_node = last_node.next
-        
-        last_node.next = node
-        return None
 
 
     def append_multiple(self, data_list: Iterable) -> None:
@@ -57,8 +45,6 @@ class Singly_Linked_List:
     
 
 class Solution:
-
-    llist_a, llist_b = None, None
 
     def initialize_llist(self, data_list: Iterable) -> Singly_Linked_List:
         return Singly_Linked_List(data_list)
