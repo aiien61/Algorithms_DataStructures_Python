@@ -1,3 +1,5 @@
+import random
+
 class BubbleSort:
     def sort_by_loop(self, *data, is_desc: bool):
         data = list(data)
@@ -47,11 +49,12 @@ class BubbleSort:
 
 
 if __name__ == "__main__":
-    bubble = BubbleSort()
-    unsorted_list = [6, 2, 4, 10, 8]
+    random.seed(100)
+    unsorted_nums = random.sample(range(10), 5)
 
-    sorted_list = bubble.sort_by_loop(*unsorted_list, is_desc=False)
+    bubble = BubbleSort()
+    sorted_list = bubble.sort_by_loop(*unsorted_nums, is_desc=False)
     print(sorted_list)
 
-    sorted_list = bubble.sort_by_recursion(*unsorted_list, is_desc=False)
+    sorted_list = bubble.sort_by_recursion(*unsorted_nums, is_desc=False)
     print(sorted_list)
