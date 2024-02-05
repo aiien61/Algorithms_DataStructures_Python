@@ -21,7 +21,7 @@ class Queue:
             return np.full(0, np.nan)
 
 
-    def push(self, value: int) -> None:
+    def put(self, value: int) -> None:
         if self.is_full():
             self.queue = self.expand_queue()
 
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     queue = Queue(values)
     print(queue) # 1,2,3,4,5
     
-    queue.push(6)
+    queue.put(6)
     print(queue) # 1,2,3,4,5,6
 
     for _ in range(queue.size):
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     print(queue) # []
 
     for value in range(11, 16):
-        queue.push(value)
+        queue.put(value)
     print(queue) # 11,12,13,14,15
 
     for _ in range(4):
@@ -139,11 +139,11 @@ if __name__ == "__main__":
     print(queue.queue) # [_ _ _ _ 15 _ _ _ _ _] 
     
     for value in range(6):
-        queue.push(value)
+        queue.put(value)
     print(queue) # 15,0,1,2,3,4,5
     print(queue.queue) # [5 _ _ _ 15 0 1 2 3 4]
 
     for value in range(0, 80):
-        queue.push(value+30)
+        queue.put(value+30)
     print(queue)
     print(queue.queue)

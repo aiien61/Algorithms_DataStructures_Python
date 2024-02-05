@@ -27,7 +27,7 @@ class Queue:
         self.tail = node
         return None
     
-    def push(self, value: int) -> None:
+    def put(self, value: int) -> None:
         if not self.tail:
             self._init_queue([value])
         else:
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     queue = Queue(values)
     print(queue)  # 1,2,3,4,5
 
-    queue.push(6)
+    queue.put(6)
     print(queue)  # 1,2,3,4,5,6
 
     while True:
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     print(queue)  # []
 
     for value in range(11, 16):
-        queue.push(value)
+        queue.put(value)
     print(queue)  # 11,12,13,14,15
 
     for _ in range(4):
@@ -83,9 +83,9 @@ if __name__ == "__main__":
     print(queue)  # 15
 
     for value in range(6):
-        queue.push(value)
+        queue.put(value)
     print(queue)  # 15,0,1,2,3,4,5
 
     for value in range(0, 80):
-        queue.push(value+30)
+        queue.put(value+30)
     print(queue)
