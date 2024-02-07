@@ -44,7 +44,7 @@ class PyStack:
         if self.is_empty():
             raise StackException("PyStackOverflow")
         else:
-            element = self._stack[-1]
+            element = self._stack[self._i_top]
             self._stack[self._i_top] = np.nan
             self._i_top -= 1
             return element
