@@ -1,12 +1,18 @@
 import numpy as np
-from typing import Any
+from typing import Any, Iterable
 
 
 class PyStack:
-    def __init__(self, size: int):
+    def __init__(self, size: int, values: Iterable=None):
         self._stack = np.full(size, np.nan)
         self._size = size
         self._i_top = -1
+        if values:
+            if len(values) > size:
+                raise StackException("PyStackOverflow")
+            else:
+                self._stack[:len(values)] = values
+                self._i_top = len(values) - 1
 
     def __repr__(self):
         return f"stack({self._stack[:self._i_top+1]})"
@@ -69,10 +75,10 @@ class StackException(Exception):
     
 
 if __name__ == "__main__":
-    numbers = list(range(1, 6))
-    mystack = PyStack(len(numbers))
+    mystack = PyStack(7, [0, 0])
     print(mystack)
 
+    numbers = list(range(1, 6))
     for n in numbers:
         mystack.push(n)
     print(mystack)
@@ -84,7 +90,7 @@ if __name__ == "__main__":
         print(str(e))
 
     # pop
-    for _ in range(5):
+    for _ in range(7):
         mystack.pop()
     print(mystack)
 
