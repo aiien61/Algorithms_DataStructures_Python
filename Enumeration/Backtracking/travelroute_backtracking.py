@@ -53,6 +53,7 @@ class TravelPlan:
     def get_index(self, state: str) -> int:
         return self.STATES[state]
 
+    # enumeration -> backtracking
     def backtracking(self, hour_constraint: int) -> None:
         self.route.append(self.start)
         self.backtracking_recursion(hour_constraint)
