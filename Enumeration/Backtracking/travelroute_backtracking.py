@@ -83,7 +83,6 @@ class TravelPlan:
             self.backtracking_recursion(hour_constraint)
 
             self.route = self.route[:-1]
-            self.STATES[next_state] = index
 
         return None
 
