@@ -54,6 +54,38 @@ class BinaryTreeList:
                 queue.put(node.right)
         
         return result
+    
+
+class BinaryTreeArray:
+    def __init__(self, array: np.ndarray):
+        self.array = array
+
+    def traverse_levelorder(self) -> list:
+        queue = Queue(self.array.size)
+        root_i = 0
+        index_boundary = self.array.size
+        queue.put(root_i)
+
+        result = []
+
+        while not queue.empty():
+            index = queue.get()
+            if self.array[index] is None:
+                continue
+
+            result.append(self.array[index])
+
+            left_index = (index + 1) * 2 - 1
+            right_index = (index + 1) * 2
+
+            if left_index < index_boundary:
+                queue.put(left_index)
+            
+            if right_index < index_boundary:
+                queue.put(right_index)
+        
+        return result
+
 
 if __name__ == "__main__":
     values = [
@@ -63,6 +95,12 @@ if __name__ == "__main__":
         None, None, 3, None, None, None, None, None
     ]
 
-    tree = BinaryTreeList(np.array(values))
-    level_order = tree.traverse_levelorder()
+    list_tree = BinaryTreeList(np.array(values))
+    level_order = list_tree.traverse_levelorder()
     print(level_order)
+
+    array_tree = BinaryTreeArray(np.array(values))
+    level_order = array_tree.traverse_levelorder()
+    print(level_order)
+
+
