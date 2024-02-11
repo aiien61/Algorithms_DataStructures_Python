@@ -1,6 +1,11 @@
+import os, sys
+sys.path.append(os.pardir)
+
 import numpy as np
 from typing import Iterable
 from dataclasses import dataclass
+
+from utils.treeviewer import plot_tree_graph
 
 
 class BinaryTreeList:
@@ -47,4 +52,4 @@ class BinaryTreeList:
 if __name__ == "__main__":
     numbers = np.array([5, 2, None, 7, 4, 8, 1, 9, 3, 7, 10, 2])
     bst = BinaryTreeList(numbers)
-    print(bst.root)
+    plot_tree_graph(bst.root)
