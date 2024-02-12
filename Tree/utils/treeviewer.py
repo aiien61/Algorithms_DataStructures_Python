@@ -28,16 +28,16 @@ def _dot_path(node_from: object, node_to: object) -> str:
 
 def _node_balancing(new_node: object, node: object):
     if node.left:
-        if node.right is None:
-            new_node.right = Node(None)
         new_node.left = _copy(node.left)
         _node_balancing(new_node.left, node.left)
+    else:
+        new_node.left = Node(None)
 
     if node.right:
-        if node.left is None:
-            new_node.left = Node(None)
         new_node.right = _copy(node.right)
         _node_balancing(new_node.right, node.right)
+    else:
+        new_node.right = Node(None)
     
     return None
 
@@ -75,7 +75,7 @@ def plot_tree_graph(tree_root, to_file="tree_graph.png"):
 
     filename, dot_extension = os.path.splitext(to_file)
 
-    # store as .dot file
+    # where to store .dot file
     utils_path = os.path.dirname(os.path.abspath(__file__))
     tmp_dir = os.path.join(utils_path, '../images')
     if not os.path.exists(tmp_dir):
