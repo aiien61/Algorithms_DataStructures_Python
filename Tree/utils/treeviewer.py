@@ -1,23 +1,60 @@
 import os
 import subprocess
 from queue import Queue
+from dataclasses import dataclass
+from typing import Any
+
+
+@dataclass
+class Node:
+    data: Any
+    times: int = 1
+    left: object = None
+    right: object = None
 
 
 def _dot_node(node: object) -> str:
-    dot_node = '{} [label="{}", color=orange, style=filled]\n'
+    dot_node = '{} [label="{}", color={}, style=filled]\n'
     
-    name = f"{node.data}: ({node.times})"
-    return dot_node.format(id(node), name)
+    name = f"{node.data}: ({node.times})" if node.data is not None else "X"
+    color = "orange" if node.data is not None else "white"
+    return dot_node.format(id(node), name, color)
+
 
 def _dot_path(node_from: object, node_to: object) -> str:
     dot_edge = f'{id(node_from)} -> {id(node_to)}\n'
     return dot_edge
 
-# TODO: add None node if not both right and left node are None, otherwise, no need to add None node
+
+def _node_balancing(new_node: object, node: object):
+    if node.left:
+        if node.right is None:
+            new_node.right = Node(None)
+        new_node.left = _copy(node.left)
+        _node_balancing(new_node.left, node.left)
+
+    if node.right:
+        if node.left is None:
+            new_node.left = Node(None)
+        new_node.right = _copy(node.right)
+        _node_balancing(new_node.right, node.right)
+    
+    return None
+
+
+def _copy(node: object) -> object:
+    node_copy = Node(node.data)
+    node_copy.times = node.times
+    return node_copy
+
+
 def get_tree_graph(tree_root: object) -> str:
+    new_root = _copy(tree_root)
+    _node_balancing(new_root, tree_root)
+
     txt = ''
     queue = Queue(10)
-    queue.put(tree_root)
+    queue.put(new_root)
     
     while not queue.empty():
         node = queue.get()
