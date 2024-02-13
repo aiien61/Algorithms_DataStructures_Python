@@ -131,29 +131,104 @@ class BinaryTreeList:
     def swap_node_data(node_x, node_y) -> None:
         node_x.data, node_y.data = node_y.data, node_x.data
         return None
+    
+
+class BinaryTreeArray:
+    def __init__(self, array: np.ndarray):
+        self.array = array
+        self.tree = np.full(array.size, np.nan)
+        self._build_tree(array)
+
+    def _build_tree(self, array: np.ndarray):
+        for value in array:
+            if (value is None) or (np.isnan(value)):
+                continue
+            self.insert(value)
+        return None
+    
+    def insert(self, value: int):
+        i = 0
+        while True:
+            try:
+                node = self.tree[i]
+            except IndexError:
+                self.tree = self.expand_array(self.tree)
+                node = self.tree[i]
+
+            # print(value, i, self.tree[i], self.tree.size)
+            if np.isnan(node):
+                self.tree[i] = value
+                break
+            elif value < node:
+                i = (i + 1) * 2 - 1
+            elif value > node:
+                i = (i + 1) * 2 - 1 + 1
+            else:
+                break
+        return None
+    
+    def search(self, value: int) -> int:
+        i = 0
+        while not np.isnan(self.tree[i]):
+            if value == self.tree[i]:
+                return self.tree[i], i
+            elif value < self.tree[i]:
+                i = (i + 1) * 2 - 1
+            elif value > self.tree[i]:
+                i = (i + 1) * 2 - 1 + 1
+
+            if i >= self.tree.size:
+                break
+        
+        raise ValueError("Not Found")
+    
+    @staticmethod
+    def expand_array(array: np.ndarray) -> np.ndarray:
+        new_array = np.full(array.size * 3, np.nan)
+        new_array[: array.size] = array
+        return new_array
+    
+    def __repr__(self):
+        return str(self.tree)
 
 
 if __name__ == "__main__":
-    # numbers = np.array([5, 2, None, 7, 4, 8, 1, 9, 3, 7, 10, 2])
-    numbers = np.array([5, 2, 6, 1, 4, 7, 3])
-    bst = BinaryTreeList(numbers)
-    plot_tree_graph(bst.root)
+    # # Binary Search Tree (Linked List)
+    # numbers = np.array([5, 2, 6, 1, 4, 7, 3])
+    # bst = BinaryTreeList(numbers)
+    # plot_tree_graph(bst.root)
+
+    # # search
+    # node = bst.search(6)
+    # print(node)
+
+    # node = bst.search(10)
+    # print(node)
+
+    # # deletion
+    # bst.delete(6)
+    # plot_tree_graph(bst.root, "delete_middle_with_right.png")
+    # bst.delete(7)
+    # plot_tree_graph(bst.root, "delete_tail.png")
+    # bst.delete(4)
+    # plot_tree_graph(bst.root, "delete_middle_with_left.png")
+    # bst.delete(2)
+    # plot_tree_graph(bst.root, "delete_middle_with_both_left_right.png")
+    # bst.delete(5)
+    # plot_tree_graph(bst.root, "delete_root.png")
+
+    # Binary Search Tree (Array)
+    numbers = np.array([5, 2, None, 7, 4, 8, 1, 9, 3, 7, 10, 2])
+    bst = BinaryTreeArray(numbers)
+    print(bst)
+
+    tree_args = {"tree_root_index": 0, "tree_array": bst.tree}
+    plot_tree_graph(tree_structure="array", to_file="arraytree.png", **tree_args)
 
     # search
-    node = bst.search(6)
-    print(node)
-
-    node = bst.search(10)
-    print(node)
-
-    # deletion
-    bst.delete(6)
-    plot_tree_graph(bst.root, "delete_middle_with_right.png")
-    bst.delete(7)
-    plot_tree_graph(bst.root, "delete_tail.png")
-    bst.delete(4)
-    plot_tree_graph(bst.root, "delete_middle_with_left.png")
-    bst.delete(2)
-    plot_tree_graph(bst.root, "delete_middle_with_both_left_right.png")
-    bst.delete(5)
-    plot_tree_graph(bst.root, "delete_root.png")
+    print(f"search result: {bst.search(10)}")
+    print(f"search result: {bst.search(9)}")
+    try:
+        print(f"search result: {bst.search(11)}")
+    except ValueError:
+        print('Not Found')
