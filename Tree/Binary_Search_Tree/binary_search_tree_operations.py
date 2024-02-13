@@ -57,7 +57,6 @@ class BinaryTreeList:
             self.root = new_child_node
     
     def _get_delete_position(self, node: object, value: int) -> object:
-        """Return """
         if node is None:
             return None
         
@@ -90,6 +89,21 @@ class BinaryTreeList:
                 node.right = new_child_node
 
         return node_to_replace
+    
+    def search(self, value: int) -> object:
+        node = self.root
+        while node is not None:
+            if value == node.data:
+                return node
+            elif value < node.data:
+                node = node.left
+            elif value > node.data:
+                node = node.right
+        
+        if node is None:
+            return None
+        else:
+            return node
 
     @staticmethod
     def relink(parent_node, child_node, new_node) -> None:
@@ -120,8 +134,26 @@ class BinaryTreeList:
 
 
 if __name__ == "__main__":
-    numbers = np.array([5, 2, None, 7, 4, 8, 1, 9, 3, 7, 10, 2])
+    # numbers = np.array([5, 2, None, 7, 4, 8, 1, 9, 3, 7, 10, 2])
+    numbers = np.array([5, 2, 6, 1, 4, 7, 3])
     bst = BinaryTreeList(numbers)
     plot_tree_graph(bst.root)
+
+    # search
+    node = bst.search(6)
+    print(node)
+
+    node = bst.search(10)
+    print(node)
+
+    # deletion
+    bst.delete(6)
+    plot_tree_graph(bst.root, "delete_middle_with_right.png")
+    bst.delete(7)
+    plot_tree_graph(bst.root, "delete_tail.png")
+    bst.delete(4)
+    plot_tree_graph(bst.root, "delete_middle_with_left.png")
+    bst.delete(2)
+    plot_tree_graph(bst.root, "delete_middle_with_both_left_right.png")
     bst.delete(5)
     plot_tree_graph(bst.root, "delete_root.png")
