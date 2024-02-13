@@ -155,7 +155,6 @@ class BinaryTreeArray:
                 self.tree = self.expand_array(self.tree)
                 node = self.tree[i]
 
-            # print(value, i, self.tree[i], self.tree.size)
             if np.isnan(node):
                 self.tree[i] = value
                 break
