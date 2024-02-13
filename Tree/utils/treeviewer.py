@@ -1,8 +1,10 @@
 import os
 import subprocess
+import numpy as np
 from queue import Queue
 from dataclasses import dataclass
 from typing import Any
+from multimethod import multimethod
 
 
 @dataclass
@@ -13,15 +15,20 @@ class Node:
     right: object = None
 
 
-def _dot_node(node: object) -> str:
+def _dot_node(node: object, is_from_array: bool=False) -> str:
     dot_node = '{} [label="{}", color={}, style=filled]\n'
     
-    name = f"{node.data}: ({node.times})" if node.data is not None else "X"
-    color = "orange" if node.data is not None else "white"
+    if is_from_array:
+        name = f"{node.data}" if not np.isnan(node.data) else "X"
+        color = "orange" if not np.isnan(node.data) else "white"
+    else:
+        name = f"{node.data}: ({node.times})" if node.data is not None else "X"
+        color = "orange" if node.data is not None else "white"
+    
     return dot_node.format(id(node), name, color)
 
 
-def _dot_path(node_from: object, node_to: object) -> str:
+def _dot_path(node_from: Any, node_to: Any) -> str:
     dot_edge = f'{id(node_from)} -> {id(node_to)}\n'
     return dot_edge
 
@@ -48,6 +55,7 @@ def _copy(node: object) -> object:
     return node_copy
 
 
+@multimethod
 def get_tree_graph(tree_root: object) -> str:
     new_root = _copy(tree_root)
     _node_balancing(new_root, tree_root)
@@ -70,8 +78,59 @@ def get_tree_graph(tree_root: object) -> str:
     return 'digraph g {\n' + txt + '}'
 
 
-def plot_tree_graph(tree_root, to_file="tree_graph.png"):
-    tree_graph = get_tree_graph(tree_root)
+@multimethod
+def get_tree_graph(tree_root_index: int, tree_array: np.ndarray) -> str:
+    txt = ''
+    nodes = [Node(value) for value in tree_array]
+    queue = Queue(10)
+    queue.put(tree_root_index)
+    
+    while not queue.empty():
+        i = queue.get()
+        txt += _dot_node(nodes[i], True)
+
+        left_i = (i + 1) * 2 - 1
+        if left_i >= tree_array.size:
+            null_node = Node(np.nan)
+            txt += _dot_node(null_node, True)
+            txt += _dot_path(nodes[i], null_node)
+        elif np.isnan(tree_array[left_i]):
+            txt += _dot_node(nodes[left_i], True)
+            txt += _dot_path(nodes[i], nodes[left_i])
+        else:
+            txt += _dot_path(nodes[i], nodes[left_i])
+            queue.put(left_i)
+
+        right_i = (i + 1) * 2 - 1 + 1
+        if right_i >= tree_array.size:
+            null_node = Node(np.nan)
+            txt += _dot_node(null_node, True)
+            txt += _dot_path(nodes[i], null_node)
+        elif np.isnan(tree_array[right_i]):
+            txt += _dot_node(nodes[right_i], True)
+            txt += _dot_path(nodes[i], nodes[right_i])
+        else:
+            txt += _dot_path(nodes[i], nodes[right_i])
+            queue.put(right_i)
+
+    return 'digraph g {\n' + txt + '}'
+
+
+@multimethod
+def plot_dot_graph(tree_root_index: int, tree_array: np.ndarray):
+    return get_tree_graph(tree_root_index, tree_array)
+
+
+@multimethod
+def plot_dot_graph(tree_root: object):
+    return get_tree_graph(tree_root)
+
+
+def plot_tree_graph(tree_structure: str, to_file="tree_graph.png", **kwargs):
+    if tree_structure.lower() == 'array':
+        tree_graph = get_tree_graph(kwargs.get("tree_root_index"), kwargs.get("tree_array")) 
+    elif tree_structure.lower() == "list":
+        tree_graph = get_tree_graph(kwargs.get("tree_root"))
 
     filename, dot_extension = os.path.splitext(to_file)
 
