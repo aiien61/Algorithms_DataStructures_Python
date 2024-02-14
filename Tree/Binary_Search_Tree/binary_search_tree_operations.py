@@ -189,6 +189,30 @@ class BinaryTreeArray:
     
     def __repr__(self):
         return str(self.tree)
+    
+    @staticmethod
+    def get_min(array: np.ndarray, root_index: int) -> int:
+        i = root_index
+        while True:
+            left_i = (i + 1) * 2 - 1
+            if left_i >= array.size:
+                break
+            if np.isnan(array[left_i]):
+                break
+            i = left_i
+        return array[i]
+    
+    @staticmethod
+    def get_max(array: np.ndarray, root_index: int) -> int:
+        i = root_index
+        while True:
+            right_i = (i + 1) * 2 - 1 + 1
+            if right_i >= array.size:
+                break
+            if np.isnan(array[right_i]):
+                break
+            i = right_i
+        return array[i]
 
 
 if __name__ == "__main__":
