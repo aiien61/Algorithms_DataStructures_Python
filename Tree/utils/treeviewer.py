@@ -9,8 +9,7 @@ from multimethod import multimethod
 
 @dataclass
 class Node:
-    data: Any
-    times: int = 1
+    value: Any
     left: object = None
     right: object = None
 
@@ -19,11 +18,11 @@ def _dot_node(node: object, is_from_array: bool=False) -> str:
     dot_node = '{} [label="{}", color={}, style=filled]\n'
     
     if is_from_array:
-        name = f"{node.data}" if not np.isnan(node.data) else "X"
-        color = "orange" if not np.isnan(node.data) else "white"
+        name = f"{node.value}" if not np.isnan(node.value) else "X"
+        color = "orange" if not np.isnan(node.value) else "white"
     else:
-        name = f"{node.data}: ({node.times})" if node.data is not None else "X"
-        color = "orange" if node.data is not None else "white"
+        name = f"{node.value}" if node.value is not None else "X"
+        color = "orange" if node.value is not None else "white"
     
     return dot_node.format(id(node), name, color)
 
@@ -50,8 +49,7 @@ def _node_balancing(new_node: object, node: object):
 
 
 def _copy(node: object) -> object:
-    node_copy = Node(node.data)
-    node_copy.times = node.times
+    node_copy = Node(node.value)
     return node_copy
 
 
