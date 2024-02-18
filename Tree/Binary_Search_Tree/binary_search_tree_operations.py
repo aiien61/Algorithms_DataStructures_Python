@@ -14,6 +14,9 @@ class BSTNode:
         self.left = None
         self.right = None
 
+    def __repr__(self):
+        return f"BSTNode({self.value})"
+
     def insert(self, value: int) -> None:
         if self.value is None:
             self.value = value
@@ -39,9 +42,11 @@ class BSTNode:
         if value == self.value:
             return self
         elif value < self.value:
-            return self.left.search(value)
+            if self.left:
+                return self.left.search(value)
         elif value > self.value:
-            return self.right.search(value)
+            if self.right:
+                return self.right.search(value)
         return None
     
     def delete(self, value: int) -> object:
@@ -339,9 +344,28 @@ class BinaryTreeArray:
 if __name__ == "__main__":
     # Binary Search Tree (Node)
     numbers = np.array([5, 2, None, 7, 4, 8, 1, 10, 3, 7, 9, 2])
-    bst_node = BSTNode()
-    bst_node = build_tree(bst_node, numbers)
-    plot_tree_graph(tree_structure="list", to_file="node_tree_graph.png", tree_root=bst_node)
+    bst_root = BSTNode()
+    bst_root = build_tree(bst_root, numbers)
+    plot_tree_graph(tree_structure="list", to_file="node_tree_graph.png", tree_root=bst_root)
+
+    # search
+    bst_node = bst_root.search(7)
+    print(bst_node)
+    bst_node = bst_root.search(11)
+    print(bst_node)
+
+    # deletion
+    bst_root.delete(9)
+    plot_tree_graph(tree_structure="list",
+                    to_file="node_tree_graph_delete_9.png", tree_root=bst_root)
+    
+    bst_root.delete(8)
+    plot_tree_graph(tree_structure="list",
+                    to_file="node_tree_graph_delete_8.png", tree_root=bst_root)
+    
+    bst_root.delete(2)
+    plot_tree_graph(tree_structure="list",
+                    to_file="node_tree_graph_delete_2.png", tree_root=bst_root)
 
 
 
