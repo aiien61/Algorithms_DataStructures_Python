@@ -9,7 +9,7 @@ from dataclasses import dataclass
 class BinarySearchTree:
     @dataclass
     class Node:
-        data: int
+        value: int
         times: int = 1
         left: object = None
         right: object = None
@@ -45,14 +45,14 @@ class BinarySearchTree:
         if root_node is None:
             return self.Node(value)
         
-        if value == root_node.data:
+        if value == root_node.value:
             root_node.times += 1
             return root_node
-        elif value < root_node.data:
+        elif value < root_node.value:
             new_node = self._insert(root_node.left, value)
             if root_node.left != new_node:
                 root_node.left = new_node        
-        elif value > root_node.data:
+        elif value > root_node.value:
             new_node = self._insert(root_node.right, value)
             if root_node.right != new_node:
                 root_node.right = new_node
@@ -69,7 +69,7 @@ class BinarySearchTree:
         if root_node is None:
             return None
         
-        if value == root_node.data:
+        if value == root_node.value:
             # X X
             if (root_node.left is None) and (root_node.right is None):
                 return None
@@ -87,11 +87,11 @@ class BinarySearchTree:
                 if root_node.left != new_node_to_link:
                     root_node.left = new_node_to_link
 
-        elif value < root_node.data:
+        elif value < root_node.value:
             new_node_to_link = self._delete(root_node.left, value)
             if root_node.left != new_node_to_link:
                 root_node.left = new_node_to_link
-        elif value > root_node.data:
+        elif value > root_node.value:
             new_node_to_link = self._delete(root_node.right, value)
             if root_node.right != new_node_to_link:
                 root_node.right = new_node_to_link
@@ -99,9 +99,9 @@ class BinarySearchTree:
 
 
     def swap_node_data(self, node1: object, node2: object) -> None:
-        value1, value2 = node1.data, node2.data
-        node1.data = value2
-        node2.data = value1
+        value1, value2 = node1.value, node2.value
+        node1.value = value2
+        node2.value = value1
         return None            
 
 
@@ -145,12 +145,12 @@ class BinarySearchTree:
         if order_by == "left":
             self.traverse_inorder(node.left, order_by, stored)
             if node is not None:
-                stored.append(node.data)
+                stored.append(node.value)
             self.traverse_inorder(node.right, order_by, stored)
         elif order_by == "right":
             self.traverse_inorder(node.right, order_by, stored)
             if node is not None:
-                stored.append(node.data)
+                stored.append(node.value)
             self.traverse_inorder(node.left, order_by, stored)
         
         return stored
@@ -165,8 +165,8 @@ class Test(unittest.TestCase):
         actual = np.full(len(expected), np.nan)
         for i in range(actual.size):
             node = bst.get_min(bst.root)
-            actual[i] = node.data
-            bst.delete(node.data)
+            actual[i] = node.value
+            bst.delete(node.value)
         is_same = np.array_equal(actual, expected)
         self.assertTrue(is_same)
 
@@ -176,8 +176,8 @@ class Test(unittest.TestCase):
         actual = np.full(len(expected), np.nan)
         for i in range(actual.size):
             node = bst.get_max(bst.root)
-            actual[i] = node.data
-            bst.delete(node.data)
+            actual[i] = node.value
+            bst.delete(node.value)
         is_same = np.array_equal(actual, expected)
         self.assertTrue(is_same)
 
