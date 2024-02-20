@@ -67,48 +67,48 @@ def build_tree(root: BSTNode, array: Iterable[int]) -> BSTNode:
     return root
             
 
-def find_modes(tree_node: BSTNode) -> Iterable:
-    if not tree_node:
-        return []
-
-    if tree_node.value is None:
-        return []
-    
-    seen = {}
-    counter = _find_modes(tree_node, seen)
-    return count_most_common(counter)
+class Solution:
+    prev_node = None
+    count = 0
+    max_count = 0
+    modes = []        
 
 
-def _find_modes(tree_node: BSTNode, seen: Iterable) -> Iterable:
-    if not tree_node:
-        return None
-    
-    # traverse to count all values by in-order
-    _find_modes(tree_node.left, seen)
-    if tree_node.value not in seen:
-        seen[tree_node.value] = 1
-    else:
-        seen[tree_node.value] += 1
-    _find_modes(tree_node.right, seen)
+    @classmethod
+    def find_modes(cls, tree_node: BSTNode) -> Iterable:
+        if not tree_node:
+            return cls.modes
+        
+        if tree_node.value is None:
+            return cls.modes
+        
+        # traverse to count all values by in-order
+        cls.find_modes(tree_node.left)
 
-    return seen
+        if cls.prev_node is None:
+            cls.prev_node = tree_node
+            cls.count = 1
+        else:
+            if tree_node.value == cls.prev_node.value:
+                cls.count += 1
+            else:
+                cls.prev_node = tree_node
+                cls.count = 1
 
+        if cls.count > cls.max_count:
+            cls.modes = [tree_node.value]
+            cls.max_count = cls.count
 
-def count_most_common(counter: dict) -> Iterable:
-    max = 0
-    modes = []
-    for k, v in counter.items():
-        if v == max:
-            modes.append(k)
-        elif v > max:
-            modes = [k]
-            max = v
-    return modes
+        elif cls.count == cls.max_count:
+            cls.modes.append(tree_node.value)
+
+        cls.find_modes(tree_node.right)
+        return cls.modes
 
 
 if __name__ == "__main__":
-    nums = [10, 1, 2, 5, 3, 2, 5, 2, 10, 5]
+    nums = [10, 1, 2, 5, 3, 2, 5, 2, 10, 5, 5]
     bst_node = BSTNode()
     bst_node = build_tree(bst_node, nums)
-    modes = find_modes(bst_node)
+    modes = Solution.find_modes(bst_node)
     print(modes)
