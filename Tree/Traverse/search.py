@@ -36,9 +36,9 @@ class BST:
         i_root = (i_start + i_end) // 2
         if value == self.tree[i_root]:
             result = (value, i_root)
-            result_left = self._search_leftmost(value, i_start, i_root-1)
-            if result_left:
-                result = result_left
+            result_tmp = self._search_leftmost(value, i_start, i_root-1)
+            if result_tmp:
+                result = result_tmp
             return result
 
         elif value < self.tree[i_root]:
@@ -62,9 +62,9 @@ class BST:
         i_root = (i_start + i_end) // 2
         if value == self.tree[i_root]:
             result = (value, i_root)
-            result_right = self._search_rightmost(value, i_root+1, i_end)
-            if result_right:
-                result = result_right
+            result_tmp = self._search_rightmost(value, i_root+1, i_end)
+            if result_tmp:
+                result = result_tmp
             return result
 
         elif value < self.tree[i_root]:
