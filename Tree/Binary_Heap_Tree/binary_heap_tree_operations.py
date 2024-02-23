@@ -23,8 +23,13 @@ class MaxHeap:
         for value in heaptree[1:]:
             if np.isnan(value):
                 current_null = 1
-            if (prev_null - current_null) > 0:
+            else:
+                current_null = 0
+
+            if current_null < prev_null:
                 is_valid = False
+                break
+            prev_null = current_null
 
         return is_valid
     
@@ -127,3 +132,13 @@ if __name__ == "__main__":
 
     tree_args = {"tree_root_index": 0, "tree_array": bht.array}
     plot_tree_graph(tree_structure="array", to_file="maxheap.png", **tree_args)
+
+    # values = np.array([66, 78, 27, 35, 6, 2, np.nan, 50, 58, 29, 76])
+    # is_valid = MaxHeap.validate(values)
+    # print(is_valid)
+
+    # values = np.full(20, np.nan)
+    # values[: 10] = [66, 78, 27, 35, 6, 2, 50, 58, 29, 76]
+    # bht = MaxHeap(values)
+    # print(bht.array)
+    # print(bht.i_end)
