@@ -3,3 +3,4 @@ numpy==1.26.3
 attrs==23.2.0
 toolz==0.12.1
 multimethod==1.11
+termcolor==2.4.0
