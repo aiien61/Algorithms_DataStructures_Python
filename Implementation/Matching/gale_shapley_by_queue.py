@@ -1,5 +1,4 @@
-from collections import namedtuple, deque, defaultdict
-from itertools import product
+from collections import namedtuple, deque
 from termcolor import colored
 from pprint import pprint
 
@@ -25,33 +24,6 @@ def preference_to_rank(preference: dict) -> dict:
     """
     return {x: {y: i for i, y in enumerate(x_pref)} for x, x_pref in preference.items()}
 
-def stable_matching_brute_force(*, men, women, mens_preferences, womens_preferences):
-    """Solve the stable matching problem using Brute force implementation.
-    
-    men: set[str]. set of men
-    women: set[str]. set of women
-    mens_preferences: dict[str, list[str]]. men's preferences
-    womens_preferences: dict[str, list[str]]. women's preferences
-
-    Returns: list[Pair]. list of unstable matching
-    """
-    men_rank = preference_to_rank(mens_preferences)
-    women_rank = preference_to_rank(womens_preferences)
-    
-    men_sequence = tuple(men)
-    matchings = {Pair(*pair) for pair in product(men, women)}
-    
-    def is_stable(matching):
-        match_man, match_woman = matching
-        rest_matchings = matchings - {matching}
-        for rest_man, rest_woman in rest_matchings:
-            has_better_man = women_rank[match_woman][rest_man] < women_rank[match_woman][match_man]
-            has_better_woman = men_rank[match_man][rest_woman] < men_rank[match_man][match_woman]
-            if has_better_man and has_better_woman:
-                return False
-        return True
-    
-    return [matching for matching in matchings if not is_stable(matching)]
 
 def gale_shapley(*, men, women, mens_preferences, womens_preferences):
     """Solve the stable matching problem using Gale-Shapley algorithm.
@@ -91,6 +63,7 @@ if __name__ == '__main__':
     pprint(mens_preferences)
     pprint(womens_preferences)
     
-    print(stable_matching_brute_force(men=men, women=women, mens_preferences=mens_preferences, womens_preferences=womens_preferences))
-    pprint(gale_shapley(men=men, women=women, mens_preferences=mens_preferences, womens_preferences=womens_preferences))
+    pprint(gale_shapley(men=men, women=women, 
+                        mens_preferences=mens_preferences, 
+                        womens_preferences=womens_preferences))
 
