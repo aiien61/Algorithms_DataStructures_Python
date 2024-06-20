@@ -1,3 +1,5 @@
+# TODO: deprecate this singly linked list python implementation
+# TODO: use the testcase of this file to test simple_singly_linkedlist.py
 
 # class LinkedList:
 

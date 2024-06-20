@@ -1,3 +1,6 @@
+# TODO: deprecate this doubly linked list python implementation
+# TODO: use the testcase of this file to test simple_doubly_linkedlist.py
+
 class Node:
 
     def __init__(self, data):
