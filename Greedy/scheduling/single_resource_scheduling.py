@@ -1,4 +1,7 @@
 """Use Greedy Algorithm to implement a simple interval-scheduling task.
+Condition: single resource, multiple requests
+
+Goal: Make compatible requests as more as possible fit into the single resource 
 """
 
 import random
