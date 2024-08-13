@@ -6,72 +6,75 @@ Goal: Partition these requests into a minimum number of compatible subsets, each
 """
 from enum import Enum
 from pprint import pprint
-from typing import List, Deque
+from typing import List, Deque, Tuple
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from collections import namedtuple, deque
 
 class TimeStatus(Enum):
     FINISH = 1
     START = 2
 
-class Stack(ABC):
-    __label: int = 0
+
+class RequestNode:
+    def __init__(self, data: Tuple[int]):
+        self.label: int = None
+        self.data: Tuple[int] = data
+        self.next: 'RequestNode' = None
+
+    @property
+    def start(self) -> int:
+        return self.data.start
+    
+    @property
+    def finish(self) -> int:
+        return self.data.finish
+    
+    def __repr__(self) -> str:
+        return f"Request(i={self.data.i}, label={self.label}, start={self.start}, finish={self.finish})"
+
+
+class LinkedList:
+    __index: int = 0
 
     @classmethod
-    def _get_label(cls) -> int:
-        label: int = cls.__label
-        cls.__label += 1
-        return label
-
-    @abstractmethod
-    def push(self): raise NotImplementedError
-
-    @abstractmethod
-    def pop(self): raise NotImplementedError
-
-    @abstractmethod
-    def is_empty(self): raise NotImplementedError
-
-    @abstractmethod
-    def peek(self): raise NotImplementedError
-
-    @abstractmethod
-    def __repr__(self) -> str: raise NotImplementedError
+    def _get_index(cls) -> int:
+        index: int = cls.__index
+        cls.__index += 1
+        return index
 
 
-class ResourceStack(Stack):
-    def __init__(self):
-        self.stack_list: List[object] = []
-        self.height: int = 0
-        self.label: int = self._get_label()
+class ResourceLinkedList(LinkedList):
+    def __init__(self) -> None:
+        self.label: int = self._get_index()
+        self.head: RequestNode = None
+        self.tail: RequestNode = None
+        self.length: int = 0
+    
+    def append(self, node: RequestNode) -> None:
+        if self.length == 0:
+            self.head = node
+            self.tail = node
+            self.length += 1
+            return None
+        
+        self.tail.next = node
+        self.tail = node
+        self.length += 1
+        return None
+    
+    def is_empty(self) -> bool:
+        return False if self.length else True
+    
+    def __iter__(self):
+        node = self.head
+        while node is not None:
+            yield node
+            node = node.next
 
     def __repr__(self) -> str:
-        return str([str(element) for element in self.stack_list])
-
-    def push(self, element: object) -> None:
-        self.stack_list.append(element)
-        self.height += 1
-        return None
-
-    def pop(self) -> object:
-        if self.height == 0:
-            return None
-        self.height -= 1
-        return self.stack_list.pop(-1)
-
-    def is_empty(self) -> bool:
-        return True if self.height == 0 else False
-
-    def peek(self) -> object:
-        return self.stack_list[-1]
-    
-    def reverse(self) -> None:
-        new_stack_list: List[object] = []
-        for _ in range(self.height):
-            new_stack_list.append(self.pop())
-        self.stack_list = new_stack_list
-        return None
-
+        return str([str(node) for node in self])
+        
 
 Request = namedtuple('Request', ['i', 'start', 'finish'])
 requests: List[tuple] = []
@@ -123,25 +126,27 @@ print(max_depth)
 requests = sorted(requests, key=lambda r: r.start)
 pprint(requests)
 
-resource_deque: Deque[object] = deque([ResourceStack() for _ in range(max_depth)])
+resource_deque: Deque[object] = deque([ResourceLinkedList() for _ in range(max_depth)])
 
 
-# TODO: use labelling to dispatch the requests
 # Time complexity: O(NM), M is the max depth, list.append() costs amortised O(1)
 for request in requests:
+    request_node = RequestNode(data=request)
     while True:
-        resource_stack = resource_deque.popleft()
-        if resource_stack.is_empty():
-            resource_stack.push(request)
-            resource_deque.append(resource_stack)
+        resource_linkedlist = resource_deque.popleft()
+        if resource_linkedlist.is_empty():
+            request_node.label = resource_linkedlist.label
+            resource_linkedlist.append(request_node)
+            resource_deque.append(resource_linkedlist)
             break
 
-        if request.start < resource_stack.peek().finish:
-            resource_deque.append(resource_stack)
+        if request_node.start < resource_linkedlist.tail.finish:
+            resource_deque.append(resource_linkedlist)
             continue
 
-        resource_stack.push(request)
-        resource_deque.append(resource_stack)
+        request_node.label = resource_linkedlist.label
+        resource_linkedlist.append(request_node)
+        resource_deque.append(resource_linkedlist)
         break
 
 pprint(resource_deque)
