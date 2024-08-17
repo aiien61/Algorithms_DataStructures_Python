@@ -1,5 +1,6 @@
 """run dfs recursively to traverse all the vertices in a graph.
 """
+from queue import Queue
 from enum import Enum, auto
 from pprint import pprint
 from typing import Set, List
@@ -35,7 +36,7 @@ def traversal_by_dfs(by: GraphType):
     R = UndirectedGraphList() if by == GraphType.LIST else UndirectedGraphMatrix()
     seen: Set[int] = set()
 
-    def dfs(graph, vertex, R) -> None:
+    def dfs_by_recursive(graph, vertex, R) -> None:
         seen.add(vertex)
         for neighbor in graph.neighbors(vertex):
             if neighbor in seen:
@@ -43,13 +44,27 @@ def traversal_by_dfs(by: GraphType):
             
             R.add_vertex(neighbor)
             R.add_edge(vertex, neighbor)
-            dfs(graph, neighbor, R)
+            dfs_by_recursive(graph, neighbor, R)
+
+    def dfs_by_loop(graph, vertex, R) -> None:
+        to_be_visited: Queue = Queue()
+        to_be_visited.put(vertex)
+        while not to_be_visited.empty():
+            neighbor = to_be_visited.get()
+            if neighbor not in seen:
+                seen.add(neighbor)
+                for next_neighbor in graph.neighbors(neighbor):
+                    R.add_vertex(next_neighbor)
+                    R.add_edge(neighbor, next_neighbor)
+                    to_be_visited.put(next_neighbor)
+        return None
 
     graph = make_graph(graph)
     graph.print_graph()
 
     R.add_vertex(1)
-    dfs(graph, 1, R)
+    # dfs_by_recursive(graph, 1, R)
+    dfs_by_loop(graph, 1, R)
     R.print_graph()
 
 
