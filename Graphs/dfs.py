@@ -1,24 +1,17 @@
 """run dfs recursively to traverse all the vertices in a graph.
 """
+from enum import Enum, auto
 from pprint import pprint
 from typing import Set, List
-from graph_class import UndirectedGraph
+from graph_class import UndirectedGraphList, UndirectedGraphMatrix
 
-connected_component: UndirectedGraph = UndirectedGraph()
-seen: Set[int] = set()
 
-def dfs(graph: UndirectedGraph, vertex: int, R: UndirectedGraph) -> None:
-    seen.add(vertex)
-    for neighbor in graph.neighbors(vertex):
-        if neighbor in seen:
-            continue
+class GraphType(Enum):
+    LIST = auto()
+    MATRIX = auto()
 
-        R.add_vertex(neighbor)
-        R.add_edge(vertex, neighbor)
-        dfs(graph, neighbor, R)
 
-def main():
-    graph = UndirectedGraph()
+def make_graph(graph):
     for i in range(1, 9):
         graph.add_vertex(i)
 
@@ -34,12 +27,31 @@ def main():
     graph.add_edge(5, 6)
     graph.add_edge(7, 8)
 
+    return graph
+
+
+def traversal_by_dfs(by: GraphType):
+    graph = UndirectedGraphList() if by == GraphType.LIST else UndirectedGraphMatrix()
+    R = UndirectedGraphList() if by == GraphType.LIST else UndirectedGraphMatrix()
+    seen: Set[int] = set()
+
+    def dfs(graph, vertex, R) -> None:
+        seen.add(vertex)
+        for neighbor in graph.neighbors(vertex):
+            if neighbor in seen:
+                continue
+            
+            R.add_vertex(neighbor)
+            R.add_edge(vertex, neighbor)
+            dfs(graph, neighbor, R)
+
+    graph = make_graph(graph)
     graph.print_graph()
 
-    connected_component.add_vertex(1)
-    dfs(graph, 1, connected_component)
-    connected_component.print_graph()
+    R.add_vertex(1)
+    dfs(graph, 1, R)
+    R.print_graph()
 
 
 if __name__ == '__main__':
-    main()
+    traversal_by_dfs(by=GraphType.MATRIX)
