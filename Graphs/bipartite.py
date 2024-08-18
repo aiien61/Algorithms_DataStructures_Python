@@ -2,8 +2,8 @@
 """
 import logging
 import unittest
-from typing import List, Set
 from enum import Enum, auto
+from typing import List, Set
 from graph_class import UndirectedGraphList
 
 logging.basicConfig(level=logging.ERROR, format=' %(asctime)s - %(levelname)s - %(message)s')
@@ -160,22 +160,3 @@ class Test(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    # graph = UndirectedGraphList()
-    # for i in range(1, 10):
-    #     graph.add_vertex(i)
-
-    # graph.add_edge(1, 2)
-    # graph.add_edge(1, 4)
-    # graph.add_edge(1, 5)
-    # graph.add_edge(1, 7)
-    # graph.add_edge(2, 3)
-    # graph.add_edge(2, 6)
-    # graph.add_edge(3, 5)
-    # graph.add_edge(3, 7)
-    # graph.add_edge(3, 4)
-    # graph.add_edge(5, 6)
-    # graph.add_edge(6, 7)
-    # graph.add_edge(8, 9)
-    # graph.print_graph()
-
-    # print(is_bipartite(graph, start_vertex=1))
