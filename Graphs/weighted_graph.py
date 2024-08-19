@@ -255,10 +255,6 @@ class WeightedDirectedAdjacencyList(Graph):
     def print_graph(self) -> None:
         pprint(self.adjacency_list)
 
-class Test(unittest.TestCase):
-    # TODO: test weighted adjacency matrix, weighted adjacency list, weighted directed adjacency matrix, weighted directed adjacency list
-    pass
-
 
 if __name__ == '__main__':
     # graph: Graph = WeightedAdjacencyMatrix()
