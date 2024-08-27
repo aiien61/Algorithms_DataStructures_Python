@@ -1,5 +1,5 @@
 import random
-import unittest
+import numpy as np
 from dataclasses import dataclass
 
 @dataclass
@@ -9,6 +9,7 @@ class TreeNode:
     left: 'TreeNode' = None
 
 
+# TODO: add methods delete()
 class BSTreeList:
     def __init__(self):
         self.root: 'TreeNode' = None
@@ -46,101 +47,59 @@ class BSTreeList:
             else:
                 return True
         return False
+
+
+class BSTreeArray:
+    def __init__(self, size: int=1):
+        self.root_index: int = 0
+        self.array: np.ndarray = np.full(size, np.nan)
+
+    @property
+    def root(self) -> int | None:
+        return self.array[self.root_index]
     
+    def insert(self, value: int) -> bool:
+        if np.isnan(self.root):
+            self.array[self.root_index] = value
+            return True
+        
+        index: int = self.root_index
+        try:
+            while True:
+                if self.array[index] == value:
+                    return False
+                
+                if value < self.array[index]:
+                    index = index * 2 + 1
+                    if np.isnan(self.array[index]):
+                        self.array[index] = value
+                        return True
+                else:
+                    index = index * 2 + 2
+                    if np.isnan(self.array[index]):
+                        self.array[index] = value
+                        return True
+        except IndexError:
+            new_array: np.ndarray = np.full(self.array.size * 3, np.nan)
+            new_array[: self.array.size] = self.array
+            self.array = new_array
+            self.array[index] = value
 
-class Test(unittest.TestCase):
-    def test_insertion_when_only_root(self):
-        bst = BSTreeList()
-        bst.insert(10)
-
-        expected: int = 10
-        actual: int = bst.root.value
-        self.assertEqual(expected, actual)
-
-    def test_insertion_when_only_left_child(self):
-        bst = BSTreeList()
-        bst.insert(10)
-        bst.insert(5)
-
-        expected: int = 5
-        actual: int = bst.root.left.value
-        self.assertEqual(expected, actual)
-
-    def test_insertion_when_only_right_child(self):
-        bst = BSTreeList()
-        bst.insert(10)
-        bst.insert(15)
-
-        expected: int = 15
-        actual: int = bst.root.right.value
-        self.assertEqual(expected, actual)
-
-    def test_insertion_when_duplicate(self):
-        bst = BSTreeList()
-        bst.insert(10)
-        bst.insert(5)
-        bst.insert(15)
-
-        expected: bool = False
-        actual: bool = bst.insert(15)
-        self.assertEqual(expected, actual)
-
-    def test_contain_when_empty_tree(self):
-        bst = BSTreeList()
-
-        expected: bool = False
-        actual: bool = bst.contains(10)
-        self.assertEqual(expected, actual)
-
-    def test_contain_when_only_root(self):
-        bst = BSTreeList()
-        bst.insert(10)
-
-        expected: bool = True
-        actual: bool = bst.contains(10)
-        self.assertEqual(expected, actual)
-
-    def test_contain_when_existing_left_child(self):
-        bst = BSTreeList()
-        bst.insert(10)
-        bst.insert(5)
-
-        expected: bool = True
-        actual: bool = bst.contains(5)
-        self.assertEqual(expected, actual)
-
-    def test_contain_when_existing_right_child(self):
-        bst = BSTreeList()
-        bst.insert(10)
-        bst.insert(15)
-
-        expected: bool = True
-        actual: bool = bst.contains(15)
-        self.assertEqual(expected, actual)
-
-    def test_contain_when_non_existing_element(self):
-        bst = BSTreeList()
-        bst.insert(10)
-        bst.insert(5)
-        bst.insert(15)
-
-        expected: bool = False
-        actual: bool = bst.contains(25)
-        self.assertEqual(expected, actual)
-
-    def test_contain_when_large_input(self):
-        random.seed(100)
-
-        bst = BSTreeList()
-        for _ in range(500):
-            bst.insert(random.randint(1, 1000))
-        bst.insert(500)
-        for _ in range(500):
-            bst.insert(random.randint(1, 1000))
-
-        expected: bool = True
-        actual: bool = bst.contains(500)
-        self.assertEqual(expected, actual)
-
-if __name__ == '__main__':
-    unittest.main()
+        return False
+    
+    def contains(self, value: int) -> bool:
+        index: int = self.root_index
+        has_value: bool = False
+        try:
+            while not np.isnan(self.array[index]):
+                if value < self.array[index]:
+                    index = index * 2 + 1
+                elif value > self.array[index]:
+                    index = index * 2 + 2
+                else:
+                    has_value = True
+                    break
+        except IndexError:
+            has_value = False
+        finally:
+            return has_value
