@@ -60,7 +60,7 @@ class PriorityQueue:
         return self.N < 0
     
     def is_full(self) -> bool:
-        return self.N == self.size
+        return (self.N + 1) == self.size
     
     def enqueue(self, value: int, priority: int) -> bool: 
         if self.is_full():
@@ -166,6 +166,36 @@ class Test(unittest.TestCase):
         pq.enqueue('b', 1)
         expected: List[int] = ['a', 'c', 'b']
         actual: List[int] = [pq.heap[i].value for i in range(pq.size)]
+        self.assertEqual(expected, actual)
+
+    def test_is_empty_when_empty_queue(self):
+        pq = PriorityQueue(1)
+        expected: bool = True
+        actual: bool = pq.is_empty()
+        self.assertEqual(expected, actual)
+
+    def test_is_empty_when_not_empty_queue(self):
+        pq = PriorityQueue(2)
+        pq.enqueue(10, 1)
+        expected: bool = False
+        actual: bool = pq.is_empty()
+        self.assertEqual(expected, actual)
+
+    def test_is_full_when_full_queue(self):
+        pq = PriorityQueue(3)
+        pq.enqueue(5, 1)   # Element 5 with priority 1
+        pq.enqueue(10, 1)
+        pq.enqueue(1, 1)
+        expected: bool = True
+        actual: bool = pq.is_full()
+        self.assertEqual(expected, actual)
+
+    def test_is_full_when_not_full_queue(self):
+        pq = PriorityQueue(3)
+        pq.enqueue(5, 1)   # Element 5 with priority 1
+        pq.enqueue(10, 1)
+        expected: bool = False
+        actual: bool = pq.is_full()
         self.assertEqual(expected, actual)
 
     
