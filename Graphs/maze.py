@@ -192,6 +192,21 @@ def dfs_search(G: Dict[tuple, list], src: Tuple[int]) -> Dict[tuple, tuple]:
     return node_from
 
 
+def dfs_search_recursive(G: Dict[tuple, list], src: Tuple[int]) -> Dict[tuple, tuple]:
+    marked: Dict[tuple, bool] = {}
+    node_from: Dict[tuple, tuple] = {}
+
+    def dfs(v: Tuple[int]):
+        marked[v] = True
+        for w in G[v]:
+            if w not in marked:
+                node_from[w] = v
+                dfs(w)
+    
+    dfs(src)
+    return node_from
+
+
 def bfs_search(G: Dict[tuple, list], src: Tuple[int]) -> Dict[tuple, tuple]:
     marked: Dict[tuple, bool] = {}
     node_from: Dict[tuple, tuple] = {}
@@ -227,5 +242,6 @@ def path_to(target: Tuple[int], src: Tuple[int], node_from: Dict[tuple, tuple]) 
 if __name__ == '__main__':
     # map: Dict[tuple, tuple] = dfs_search(MAZE, (0, 2))
     # map: Dict[tuple, tuple] = bfs_search(MAZE, (0, 2))
-    map: Dict[tuple, tuple] = guided_search(MAZE, (0, 2), (2, 2))
+    map: Dict[tuple, tuple] = dfs_search_recursive(MAZE, (0, 2))
+    # map: Dict[tuple, tuple] = guided_search(MAZE, (0, 2), (2, 2))
     print(path_to((2, 2), (0, 2), map))
