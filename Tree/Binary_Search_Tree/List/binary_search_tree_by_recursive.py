@@ -201,7 +201,7 @@ class TestBinarySearchTree(unittest.TestCase):
             bst.insert(value)
 
         expected: int = 3
-        actual: int = bst.get_min(bst.root)
+        actual: int = bst.get_min(bst.root).value
         self.assertEqual(expected, actual)
 
     def test_get_max(self):
@@ -210,7 +210,7 @@ class TestBinarySearchTree(unittest.TestCase):
             bst.insert(value)
 
         expected: int = 30
-        actual: int = bst.get_max(bst.root)
+        actual: int = bst.get_max(bst.root).value
         self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
