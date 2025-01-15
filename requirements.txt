@@ -1,10 +1,9 @@
 prettytable==3.9.0
-numpy==1.26.3
 attrs==23.2.0
 toolz==0.12.1
 multimethod==1.11
 termcolor==2.4.0
 networkx==3.3
-pandas==2.0.3
-matplotlib==3.8.0
-numpy==2.2.1
+icecream==2.1.4
+pandas
+matplotlib
