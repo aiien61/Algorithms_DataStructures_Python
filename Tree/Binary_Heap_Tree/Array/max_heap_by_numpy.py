@@ -47,13 +47,13 @@ class MaxHeap:
             index = max_child_index
         return None
     
-    def _shift_up(self, index: int) -> None:
+    def _bubble_up(self, index: int) -> None:
         if index <= 0:
             return None
         parent_index: int = self._parent(index)
         if self.heap[parent_index] < self.heap[index]:
             self._swap(parent_index, index)
-            return self._shift_up(parent_index)
+            return self._bubble_up(parent_index)
         return None
     
     def _extend(self, heap: np.ndarray) -> np.ndarray:
@@ -69,7 +69,7 @@ class MaxHeap:
         self.size += 1
         
         current_index: int = self.size - 1
-        self._shift_up(current_index)
+        self._bubble_up(current_index)
         return None
     
     def remove(self) -> int | None:

@@ -10,7 +10,6 @@ class Node:
     right: "Node" = None
     parent: "Node" = None
 
-
 class MaxHeap:
     def __init__(self):
         self.root: Node = None
@@ -28,13 +27,13 @@ class MaxHeap:
                 queue.append(node.right)
         return str(result)
 
-    def _shift_up(self, node: Node):
+    def _bubble_up(self, node: Node):
         if node.parent is None:
             return None
 
         if node.parent.value < node.value:
             node.parent.value, node.value = node.value, node.parent.value
-            return self._shift_up(node.parent)
+            return self._bubble_up(node.parent)
         
         return None
     
@@ -81,7 +80,7 @@ class MaxHeap:
                 queue.append(node.left)
                 queue.append(node.right)
 
-        self._shift_up(new_node)
+        self._bubble_up(new_node)
         return None
     
     def pop(self) -> int:
