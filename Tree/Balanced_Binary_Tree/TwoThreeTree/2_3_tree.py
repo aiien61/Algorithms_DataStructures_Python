@@ -189,6 +189,11 @@ class TwoThreeTree:
             self._preorder_helper(node.right, container)
         
         return None
+    
+    # TODO: complete this method
+    def is_balanced(self) -> bool:
+        pass
+    
 
 
 class TestTwoThreeTree(unittest.TestCase):
