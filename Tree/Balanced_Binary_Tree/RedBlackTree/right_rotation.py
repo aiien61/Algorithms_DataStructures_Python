@@ -51,7 +51,7 @@ class BSTree:
 
         new_node.parent = parent
 
-# TODO: create right rotate function
+
 def right_rotate(T: BSTree, x: Node) -> Node:
     """right rotate x to y to be the new root of the tree
         |
@@ -61,11 +61,28 @@ def right_rotate(T: BSTree, x: Node) -> Node:
      / \
     a   b
     """
-    pass
+    y: Node = x.left
+    x.left = y.right
+
+    if y.right != T.nil:
+        y.right.parent = x
+
+    y.parent = x.parent
+
+    if x.parent == T.nil:
+        T.root = y
+    elif x.parent.left == x:
+        x.parent.left = y
+    else:
+        x.parent.right = y
+    
+    y.right = x
+    x.parent = y
+    return y
 
 
 def test_drive():
-    nums: List[int] = [1, 0, 10, 5, 20]
+    nums: List[int] = [10, 20, 1, 0, 5]
     bst: BSTree = BSTree(keys=nums)
     ic(bst.root)
 
