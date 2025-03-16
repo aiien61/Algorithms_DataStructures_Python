@@ -43,10 +43,10 @@ def insert(T: RedBlackTree, key: int) -> None:
     else:
         p.right = new_node
 
-    fixup(T, new_node)
+    insertion_fixup(T, new_node)
     return None
     
-def fixup(T: RedBlackTree, new_leaf: Node) -> None:
+def insertion_fixup(T: RedBlackTree, new_leaf: Node) -> None:
     z: Node = new_leaf
     while z.parent.color == Color.RED:
         x: Node = z.parent
