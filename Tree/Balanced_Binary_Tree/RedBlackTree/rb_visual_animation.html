@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紅黑樹視覺化</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .node { display: inline-block; width: 30px; height: 30px; text-align: center;
+                border-radius: 50%; line-height: 30px; margin: 5px; }
+        .red { background-color: red; color: white; }
+        .black { background-color: black; color: white; }
+        .tree { display: flex; flex-direction: column; align-items: center; }
+        .level { display: flex; justify-content: center; }
+    </style>
+</head>
+<body>
+    <h2>紅黑樹操作示例</h2>
+    <input type="number" id="nodeValue" placeholder="輸入數值">
+    <button onclick="insertNode()">插入節點</button>
+    <button onclick="deleteNode()">刪除節點</button>
+    <div class="tree" id="tree"></div>
+
+    <script>
+        class Node {
+            constructor(value, color = 'red') {
+                this.value = value;
+                this.color = color;
+                this.left = null;
+                this.right = null;
+                this.parent = null;
+            }
+        }
+
+        class RedBlackTree {
+            constructor() {
+                this.root = null;
+            }
+
+            insert(value) {
+                let newNode = new Node(value);
+                if (!this.root) {
+                    newNode.color = 'black';
+                    this.root = newNode;
+                } else {
+                    this.root = this._insertNode(this.root, newNode);
+                    this.fixInsert(newNode);
+                }
+                this.render();
+            }
+
+            _insertNode(root, node) {
+                if (!root) return node;
+                if (node.value < root.value) {
+                    root.left = this._insertNode(root.left, node);
+                    root.left.parent = root;
+                } else {
+                    root.right = this._insertNode(root.right, node);
+                    root.right.parent = root;
+                }
+                return root;
+            }
+
+            fixInsert(node) {
+                while (node.parent && node.parent.color === 'red') {
+                    let grandparent = node.parent.parent;
+                    if (node.parent === grandparent.left) {
+                        let uncle = grandparent.right;
+                        if (uncle && uncle.color === 'red') {
+                            node.parent.color = 'black';
+                            uncle.color = 'black';
+                            grandparent.color = 'red';
+                            node = grandparent;
+                        } else {
+                            if (node === node.parent.right) {
+                                node = node.parent;
+                                this.leftRotate(node);
+                            }
+                            node.parent.color = 'black';
+                            grandparent.color = 'red';
+                            this.rightRotate(grandparent);
+                        }
+                    } else {
+                        let uncle = grandparent.left;
+                        if (uncle && uncle.color === 'red') {
+                            node.parent.color = 'black';
+                            uncle.color = 'black';
+                            grandparent.color = 'red';
+                            node = grandparent;
+                        } else {
+                            if (node === node.parent.left) {
+                                node = node.parent;
+                                this.rightRotate(node);
+                            }
+                            node.parent.color = 'black';
+                            grandparent.color = 'red';
+                            this.leftRotate(grandparent);
+                        }
+                    }
+                }
+                this.root.color = 'black';
+            }
+
+            delete(value) {
+                // 簡化版刪除邏輯，完整實現需考慮多種情況
+                this.root = this._deleteNode(this.root, value);
+                if (this.root) this.root.color = 'black';
+                this.render();
+            }
+
+            _deleteNode(root, value) {
+                if (!root) return root;
+                if (value < root.value) {
+                    root.left = this._deleteNode(root.left, value);
+                } else if (value > root.value) {
+                    root.right = this._deleteNode(root.right, value);
+                } else {
+                    if (!root.left) return root.right;
+                    if (!root.right) return root.left;
+                    let temp = this.findMin(root.right);
+                    root.value = temp.value;
+                    root.right = this._deleteNode(root.right, temp.value);
+                }
+                return root;
+            }
+
+            findMin(node) {
+                while (node.left) node = node.left;
+                return node;
+            }
+
+            leftRotate(node) {
+                let temp = node.right;
+                node.right = temp.left;
+                if (temp.left) temp.left.parent = node;
+                temp.parent = node.parent;
+                if (!node.parent) this.root = temp;
+                else if (node === node.parent.left) node.parent.left = temp;
+                else node.parent.right = temp;
+                temp.left = node;
+                node.parent = temp;
+            }
+
+            rightRotate(node) {
+                let temp = node.left;
+                node.left = temp.right;
+                if (temp.right) temp.right.parent = node;
+                temp.parent = node.parent;
+                if (!node.parent) this.root = temp;
+                else if (node === node.parent.right) node.parent.right = temp;
+                else node.parent.left = temp;
+                temp.right = node;
+                node.parent = temp;
+            }
+
+            render() {
+                document.getElementById('tree').innerHTML = this._renderTree(this.root);
+            }
+
+            _renderTree(node) {
+                if (!node) return '';
+                return `<div class='node ${node.color}'>${node.value}</div>
+                        <div class='level'>
+                            <div>${this._renderTree(node.left)}</div>
+                            <div>${this._renderTree(node.right)}</div>
+                        </div>`;
+            }
+        }
+
+        let tree = new RedBlackTree();
+        function insertNode() {
+            let value = parseInt(document.getElementById('nodeValue').value);
+            if (!isNaN(value)) tree.insert(value);
+        }
+        function deleteNode() {
+            let value = parseInt(document.getElementById('nodeValue').value);
+            if (!isNaN(value)) tree.delete(value);
+        }
+    </script>
+</body>
+</html>
